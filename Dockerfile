@@ -4,13 +4,13 @@ WORKDIR /app
 
 ENV MIX_ENV="prod"
 
-COPY mix.exs mix.lock /
+COPY mix.exs mix.lock /app/
 
 RUN mix deps.get --only $MIX_ENV
 
 RUN mix deps.compile
 
-COPY lib /
+COPY lib /app/
 
 RUN mix compile
 
