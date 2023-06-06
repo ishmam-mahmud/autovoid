@@ -18,4 +18,4 @@ COPY config/runtime.exs config/
 
 RUN mix release
 
-CMD _build/prod/rel/autovoid/bin/autovoid
+CMD _build/prod/rel/autovoid/bin/autovoid start
