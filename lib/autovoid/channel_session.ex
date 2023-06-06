@@ -3,7 +3,7 @@ defmodule Autovoid.ChannelSession do
 
   alias Autovoid.Channel
 
-  @interval 2000
+  @interval 60_000
 
   def start_link(channel_id) when is_integer(channel_id) do
     GenServer.start_link(__MODULE__, channel_id, name: global_name(channel_id))
