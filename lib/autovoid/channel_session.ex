@@ -17,7 +17,7 @@ defmodule Autovoid.ChannelSession do
 
   @impl GenServer
   def handle_info(:get_messages, %Channel{} = channel) do
-    messages = Nostrum.Api.get_channel_messages!(channel.id, 2)
+    messages = Nostrum.Api.get_channel_messages!(channel.id, :infinity)
     message_ids = Enum.map(messages, fn %Nostrum.Struct.Message{} = message -> message.id end)
     updated_channel = Channel.add_message_ids(channel, message_ids)
     Process.send_after(self(), :delete_messages, @interval)
