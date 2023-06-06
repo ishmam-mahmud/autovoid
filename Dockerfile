@@ -10,7 +10,7 @@ RUN mix deps.get --only $MIX_ENV
 
 RUN mix deps.compile
 
-COPY lib /app/
+COPY lib /app/lib/
 
 RUN mix compile
 
