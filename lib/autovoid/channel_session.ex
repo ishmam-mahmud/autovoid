@@ -23,7 +23,7 @@ defmodule Autovoid.ChannelSession do
     message_ids = Enum.map(messages, fn message -> message.id end)
     updated_channel = Channel.add_message_ids(channel, message_ids)
     Process.send_after(self(), :delete_messages, @interval)
-    {:noreply, channel}
+    {:noreply, updated_channel}
   end
 
   @impl GenServer
