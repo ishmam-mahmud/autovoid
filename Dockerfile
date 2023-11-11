@@ -14,8 +14,6 @@ COPY lib /app/lib/
 
 RUN mix compile
 
-COPY config/runtime.exs config/
-
 RUN mix release
 
 CMD _build/prod/rel/autovoid/bin/autovoid start
