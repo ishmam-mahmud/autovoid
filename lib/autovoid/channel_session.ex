@@ -19,11 +19,11 @@ defmodule Autovoid.ChannelSession do
 
   @impl GenServer
   def handle_info(:get_messages, %Channel{} = channel) do
-    messages = Nostrum.Api.get_channel_messages!(channel.id, @get_messages_limit)
-    message_ids = Enum.map(messages, fn %Nostrum.Struct.Message{} = message -> message.id end)
+    {:ok, messages} = Autovoid.Discord.get_channel_messages(channel.id)
+    message_ids = Enum.map(messages, fn message -> message.id end)
     updated_channel = Channel.add_message_ids(channel, message_ids)
     Process.send_after(self(), :delete_messages, @interval)
-    {:noreply, updated_channel}
+    {:noreply, channel}
   end
 
   @impl GenServer
@@ -31,10 +31,10 @@ defmodule Autovoid.ChannelSession do
     case Channel.get_number_of_messages(channel) do
       1 ->
         [message_id] = channel.message_ids
-        {:ok} = Nostrum.Api.delete_message!(channel.id, message_id)
+        Autovoid.Discord.delete_message(channel.id, message_id)
 
       num_messages when num_messages >= @min_messages_delete ->
-        {:ok} = Nostrum.Api.bulk_delete_messages!(channel.id, channel.message_ids)
+        Autovoid.Discord.bulk_delete_messages(channel.id, channel.message_ids)
 
       _other ->
         {:ok}
